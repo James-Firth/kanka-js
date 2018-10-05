@@ -2,7 +2,7 @@
   "name": "kanka-js",
   "version": "0.0.0",
   "description": "An API Wrapper for the Kanka.io api",
-  "main": "src/index.js",
+  "main": "src/kanka/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
