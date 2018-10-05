@@ -1,5 +1,5 @@
 {
-  "name": "kanka-js",
+  "name": "kanka",
   "version": "0.0.0",
   "description": "An API Wrapper for the Kanka.io api",
   "main": "src/kanka/index.js",
