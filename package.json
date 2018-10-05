@@ -1,0 +1,27 @@
+{
+  "name": "kanka-js",
+  "version": "0.0.0",
+  "description": "An API Wrapper for the Kanka.io api",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/James-Firth/kankajs.git"
+  },
+  "keywords": [
+    "js",
+    "api",
+    "kanka"
+  ],
+  "author": "James Firth <hello@james-firth.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/James-Firth/kankajs/issues"
+  },
+  "homepage": "https://github.com/James-Firth/kankajs#readme",
+  "dependencies": {
+    "node-fetch": "^2.2.0"
+  }
+}
