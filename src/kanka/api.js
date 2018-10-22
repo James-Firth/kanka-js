@@ -2,13 +2,25 @@ const fetch = require('node-fetch');
 let token = null || process.env.KANKA_TOKEN;
 let DEBUG = false || process.env.DEBUG;
 
-// fetches all the
-function getAll({campaignID = '', pathSuffix, type}) {
+
+// TODO: Optimize cache
+let cache = {};
+
+// fetches anything that has a list.
+async function getAll({campaignID = '', pathSuffix, type, noCache = false}) {
+    const useCache = (true !== noCache); // nice flag, but confusing so flipping it.
     let requestPath = `https://kanka.io/api/v1/campaigns/${campaignID}`;
 
     if (pathSuffix) requestPath += `/${pathSuffix}`
 
     if (DEBUG) console.log(`Request path: ${requestPath}`)
+
+
+    if (cache[requestPath] && useCache) {
+        console.log(`Hit Cache for ${requestPath}`);
+        return Promise.resolve(cache[requestPath]);
+    }
+
     return fetch(requestPath, {
         headers: {
             Accept: 'application/json',
@@ -25,20 +37,28 @@ function getAll({campaignID = '', pathSuffix, type}) {
         delete results.data;
         results.data = mappedData;
 
+        // Store in cache
+        cache[requestPath] = results;
         return results;
     })
 }
 
-function getOne({campaignID, pathSuffix, id, type}) {
+async function getOne({campaignID, pathSuffix, id, type, noCache = false}) {
+    const useCache = (true !== noCache); // nice flag, but confusing so flipping it.
     if (!campaignID) throw new Error('Missing campaign ID');
     
     let requestPath = `https://kanka.io/api/v1/campaigns/${campaignID}`;
 
-    if (!pathSuffix || typeof pathSuffix !== 'string') throw new Error('Must provide path suffix');
+    if (pathSuffix && typeof pathSuffix !== 'string') throw new Error('Must provide path suffix');
 
-    requestPath = `${requestPath}/${pathSuffix}`;
+    requestPath = `${requestPath}/${pathSuffix ? pathSuffix : ''}`;
 
     if (id) requestPath = `${requestPath}/${id}`
+
+    if (cache[requestPath] && useCache) {
+        console.log(`Hit Cache for ${requestPath}`);
+        return Promise.resolve(cache[requestPath]);
+    }
 
     return fetch(requestPath, {
         headers: {
@@ -47,7 +67,17 @@ function getOne({campaignID, pathSuffix, id, type}) {
         }
     })
     .then( res => res.json())
-    .then( results => new type(results.data, campaignID))
+    .then( results => {
+
+        try {
+            const itemInstance = new type(results.data, campaignID);
+
+            cache[requestPath] = itemInstance;
+            return itemInstance;
+        } catch(e) {
+            throw e;
+        }
+    })
 }
 
 function setToken(newToken) {
