@@ -1,6 +1,16 @@
 const { makeGet } = require('./api');
+
 const { Calendar } = require('./calendar');
 const { Character } = require('./character');
+const { DiceRoll } = require('./dice_roll');
+const { Event } = require('./event');
+const { Family } = require('./family');
+const { Journal } = require('./journal');
+const { Location } = require('./location');
+const { Organisation } = require('./organisation');
+const { Page } = require('./page');
+const { Quest } = require('./quest');
+const { Tag } = require('./tag');
 const { User } = require('./user');
 
 class Campaign{
@@ -21,16 +31,51 @@ class Campaign{
 
     get calendars() {
         return {
-            get: async (id) => await makeGet({campaignID: this.id, pathSuffix: 'calendars', entityType: Calendar }),
+            get: async (entityID) => await makeGet({campaignID: this.id, id: entityID, pathSuffix: 'calendars', entityType: Calendar }),
         }
     }
 
     get characters() {
         return {
-            get: async (id) => await makeGet({campaignID: this.id, pathSuffix: 'characters', entityType: Character}),
+            get: async (entityID) => await makeGet({campaignID: this.id, id: entityID, pathSuffix: 'characters', entityType: Character}),
         };
     };
 
+    get dice_rolls() {
+        return {
+            get: async (entityID) => await makeGet({campaignID: this.id, id: entityID, pathSuffix: 'dice_rolls', entityType: DiceRoll}),
+        }
+    };
+
+    get events() {
+        return {
+            get: async (entityID) => await makeGet({campaignID: this.id, id: entityID, pathSuffix: 'events', entityType: Event}),
+        }
+    };
+
+    get journals() {
+        return {
+            get: async (entityID) => await makeGet({campaignID: this.id, id: entityID, pathSuffix: 'journals', entityType: Journal}),
+        }
+    };
+
+    get locations() {
+        return {
+            get: async (entityID) => await makeGet({campaignID: this.id, id: entityID, pathSuffix: 'locations', entityType: Location}),
+        }
+    };
+
+    get organisations() {
+        return {
+            get: async (entityID) => await makeGet({campaignID: this.id, id: entityID, pathSuffix: 'organisations', entityType: Organisation}),
+        }
+    };
+
+    get families() {
+        return {
+            get: async (entityID) => await makeGet({campaignID: this.id, id: entityID, pathSuffix: 'families', entityType: Family}),
+        }
+    };
 
     get users() {
         return {
