@@ -1,4 +1,6 @@
 const fetch = require('node-fetch');
+const { Page } = require('./page');
+
 let token = null || process.env.KANKA_TOKEN;
 let DEBUG = false || process.env.DEBUG;
 
@@ -6,48 +8,10 @@ let DEBUG = false || process.env.DEBUG;
 // TODO: Optimize cache
 let cache = {};
 
-// fetches anything that has a list.
-async function getAll({campaignID = '', pathSuffix, type, noCache = false}) {
+async function makeGet({campaignID, pathSuffix, id, entityType, noCache = false}) {
     const useCache = (true !== noCache); // nice flag, but confusing so flipping it.
-    let requestPath = `https://kanka.io/api/v1/campaigns/${campaignID}`;
 
-    if (pathSuffix) requestPath += `/${pathSuffix}`
-
-    if (DEBUG) console.log(`Request path: ${requestPath}`)
-
-
-    if (cache[requestPath] && useCache) {
-        console.log(`Hit Cache for ${requestPath}`);
-        return Promise.resolve(cache[requestPath]);
-    }
-
-    return fetch(requestPath, {
-        headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${token}`
-        }
-    })
-    .then( res => res.json())
-    .then( resObj => {
-        if (!resObj.data) throw new Error(resObj.message);
-        return resObj;
-    })
-    .then( results => {
-        const mappedData = results.data.map(value => new type(value, campaignID));
-        delete results.data;
-        results.data = mappedData;
-
-        // Store in cache
-        cache[requestPath] = results;
-        return results;
-    })
-}
-
-async function getOne({campaignID, pathSuffix, id, type, noCache = false}) {
-    const useCache = (true !== noCache); // nice flag, but confusing so flipping it.
-    if (!campaignID) throw new Error('Missing campaign ID');
-    
-    let requestPath = `https://kanka.io/api/v1/campaigns/${campaignID}`;
+    let requestPath = `https://kanka.io/api/v1/campaigns/${campaignID ? campaignID : ''}`;
 
     if (pathSuffix && typeof pathSuffix !== 'string') throw new Error('Must provide path suffix');
 
@@ -68,12 +32,22 @@ async function getOne({campaignID, pathSuffix, id, type, noCache = false}) {
     })
     .then( res => res.json())
     .then( results => {
+        if (!results.data) throw new Error(results.message);
 
         try {
-            const itemInstance = new type(results.data, campaignID);
+            let returnData;
+            if (Array.isArray(results.data)) {
+                if (results.meta) {
+                    returnData = new Page(results, {campaignID, entityType})
+                } else {
+                    returnData = results.data.map(value => new entityType(value, campaignID));
+                }
+            } else {
+                returnData = new entityType(results.data, campaignID);
+            }
 
-            cache[requestPath] = itemInstance;
-            return itemInstance;
+            cache[requestPath] = returnData;
+            return returnData;
         } catch(e) {
             throw e;
         }
@@ -86,7 +60,6 @@ function setToken(newToken) {
 }
 
 module.exports = {
-    getAll,
-    getOne,
+    makeGet,
     setToken,
 }

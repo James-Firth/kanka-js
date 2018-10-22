@@ -1,15 +1,16 @@
-const { getAll, getOne } = require('./api');
-const Character = require('./character').Character;
-const User = require('./user').User;
-const fetch = require('node-fetch');
+const { makeGet } = require('./api');
+const { Calendar } = require('./calendar');
+const { Character } = require('./character');
+const { User } = require('./user');
 
 class Campaign{
     constructor({id, name, locale, entry, image, visibility, created_at, updated_at, members}) {
         const campaign = {id, name, locale, entry, visibility, created_at, updated_at};
 
-        const campaignMembers = members.map(value => new User(value.user));
+        if (!Array.isArray(members) || members.length < 1) throw new Error('Members missing from campaign');
+        
+        campaign.members = members.map(value => new User(value.user));
 
-        campaign.members = campaignMembers;
         Object.assign(this, campaign);
 
         this.image = `https://kanka-user-assets.s3.eu-central-1.amazonaws.com/${image}`
@@ -18,42 +19,52 @@ class Campaign{
     get public() { return this.visibility === 'public' }
     get private() { return this.visibility === 'private'}
 
-    get characters() {
+    get calendars() {
         return {
-            list: () => { 
-                return getAll({campaignID: this.id, pathSuffix: 'characters', type: Character})
-                .then(results => results.data); 
-            },
-            get: (id) => {
-                return getOne({campaignID: this.id, pathSuffix: 'characters', id, type: Character})
-                .then(results => results.data);
-            },
+            get: async (id) => await makeGet({campaignID: this.id, pathSuffix: 'calendars', entityType: Calendar }),
         }
     }
 
+    get characters() {
+        return {
+            get: async (id) => await makeGet({campaignID: this.id, pathSuffix: 'characters', entityType: Character}),
+        };
+    };
+
+
+    get users() {
+        return {
+            get: async () => await makeGet({ campaignID: this.id, pathSuffix: 'users', entityType: User })
+        }
+    }
 }
 
 function all() {
-    return getAll({type: Campaign})
-    .then(results => results.data)
-    .catch(err => console.error);
+    return makeGet({entityType: Campaign})
+    .catch(err => {
+        throw err;
+    });
 }
 
-function get(id) {
-    return getOne({campaignID: id, type: Campaign})
-    .then(results => results.data)
-    .catch(err => console.error);
+function getCampaign(id) {
+    return makeGet({campaignID: id, entityType: Campaign})
+    .catch(err => {
+        throw err;
+    });
 }
 
 function getUsers(id){
-    return generateGetAll({ campaignID: id, pathSuffix: 'users', type: User})
+    return makeGet({ campaignID: id, pathSuffix: 'users', entityType: User})
     .then(results => results.data)
+    .catch(err => {
+        throw err;
+    });
 }
 
 
 module.exports = {
     Campaign,
     all,
-    get,
+    getCampaign,
     getUsers,
 };
