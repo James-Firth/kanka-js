@@ -2,6 +2,7 @@
 // Then the campaign can be a base item but not entity
 const { makeGet } = require('./api');
 
+//TODO: Fix attributes, etc. They need more properties from Entity.
 class EntityBase {
     constructor({created_at, updated_at}){
         this.created_at = created_at;
@@ -12,10 +13,10 @@ class EntityBase {
 class Attribute extends EntityBase {
     constructor(params, campaignID) {
         super(params, campaignID);
-        const { default_order, value } = params;
+        const { name, default_order, value } = params;
 
         this.path = `entities/${this.entity_id}/attributes`;
-        Object.assign(this, { default_order, value });
+        Object.assign(this, { name, default_order, value });
     }
 }
 
