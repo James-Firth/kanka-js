@@ -1,4 +1,4 @@
-const Entity = require('./entity');
+const { Entity } = require('./entity');
 
 class Family extends Entity{
     constructor(params, campaignID) {

@@ -1,4 +1,4 @@
-const Entity = require('./entity');
+const { Entity } = require('./entity');
 const { makeGet } = require('./api');
 
 class Location extends Entity{

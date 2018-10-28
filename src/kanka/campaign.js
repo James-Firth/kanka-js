@@ -13,6 +13,7 @@ const { Quest } = require('./quest');
 // const { Tag } = require('./tag');
 const { User } = require('./user');
 
+let IMAGE_BASE_PATH = 'https://kanka-user-assets.s3.eu-central-1.amazonaws.com/';
 class Campaign{
     constructor({id, name, locale, entry, image, visibility, created_at, updated_at, members}) {
         const campaign = {id, name, locale, entry, visibility, created_at, updated_at};
@@ -23,7 +24,7 @@ class Campaign{
 
         Object.assign(this, campaign);
 
-        this.image = `https://kanka-user-assets.s3.eu-central-1.amazonaws.com/${image}`
+        this.image = `${IMAGE_BASE_PATH}${image}`
     }
 
     get public() { return this.visibility === 'public' }
@@ -106,10 +107,16 @@ function getUsers(id){
     });
 }
 
+function setImageBasePath(newPath) {
+    // TODO: Add url validation
+    IMAGE_BASE_PATH = newPath;
+}
+
 
 module.exports = {
     Campaign,
     all,
     getCampaign,
     getUsers,
+    setImageBasePath
 };

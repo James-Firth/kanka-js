@@ -1,4 +1,4 @@
-const Entity = require('./entity');
+const { Entity } = require('./entity');
 
 const { Character } = require('./character');
 const { Location } = require('./location');

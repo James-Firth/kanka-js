@@ -1,4 +1,4 @@
-const Entity = require('./entity');
+const { Entity } = require('./entity');
 
 class DiceRoll extends Entity{
     constructor(params, campaignID) {

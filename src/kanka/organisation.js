@@ -1,4 +1,4 @@
-const Entity = require('./entity');
+const { Entity } = require('./entity');
 const { makeGet } = require('./api');
 
 const { Character } = require('./character');

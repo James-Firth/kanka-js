@@ -2,8 +2,24 @@ const fetch = require('node-fetch');
 const { Page } = require('./page');
 
 let token = null || process.env.KANKA_TOKEN;
+let code = null || process.env.KANKA_CODE;
 let DEBUG = false || process.env.DEBUG;
+let BASE_URL = 'https://kanka.io/api/v1/campaigns/';
 
+function setDomain(newDomain) {
+    // TODO: Add url validation
+    BASE_URL = `https://${newDomain}/api/v1/campaigns/`;
+}
+
+function setToken(newToken) {
+    if (!newToken || typeof newToken !== 'string') throw new Error('Must provide an access token');
+    token = newToken;
+}
+
+function setCode(newCode) {
+    if (!newCode || typeof newCode !== 'string') throw new Error('Must provide an code');
+    code = newCode;
+}
 
 // TODO: Optimize cache
 let cache = {};
@@ -11,7 +27,7 @@ let cache = {};
 async function makeGet({campaignID, pathSuffix, id, entityType, noCache = false}) {
     const useCache = (true !== noCache); // nice flag, but confusing so flipping it.
 
-    let requestPath = `https://kanka.io/api/v1/campaigns/${campaignID ? campaignID : ''}`;
+    let requestPath = `${BASE_URL}${campaignID ? campaignID : ''}`;
 
     if (pathSuffix) {
         if (typeof pathSuffix !== 'string') throw new Error('Must provide path suffix');
@@ -57,12 +73,8 @@ async function makeGet({campaignID, pathSuffix, id, entityType, noCache = false}
     })
 }
 
-function setToken(newToken) {
-    if (!newToken || typeof newToken !== 'string') throw new Error('Must provide an access token');
-    token = newToken;
-}
-
 module.exports = {
     makeGet,
     setToken,
+    setDomain,
 }

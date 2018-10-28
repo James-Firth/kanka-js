@@ -2,6 +2,7 @@
 // Then the campaign can be a base item but not entity
 const { makeGet } = require('./api');
 
+let IMAGE_BASE_PATH = 'https://kanka-user-assets.s3.eu-central-1.amazonaws.com/';
 //TODO: Fix attributes, etc. They need more properties from Entity.
 class EntityBase {
     constructor({created_at, updated_at}){
@@ -56,7 +57,7 @@ class Entity extends EntityBase{
         const entity = { created_by, id, entity_id, entry, is_private, section_id, name, type};
         this.campaignID = campaignID;
         if (image) {
-            this.image = `https://kanka-user-assets.s3.eu-central-1.amazonaws.com/${image}`
+            this.image = `${IMAGE_BASE_PATH}${image}`
         }
         Object.assign(this, entity);
     }
@@ -111,4 +112,11 @@ class Entity extends EntityBase{
 
 }
 
-module.exports = Entity;
+function setImageBasePath(newPath) {
+    IMAGE_BASE_PATH = newPath;
+}
+
+module.exports = {
+    Entity,
+    setImageBasePath,
+};

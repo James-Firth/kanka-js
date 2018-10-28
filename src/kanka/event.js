@@ -1,4 +1,4 @@
-const Entity = require('./entity');
+const { Entity } = require('./entity');
 
 class Event extends Entity{
     constructor(params, campaignID) {
