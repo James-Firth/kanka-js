@@ -13,11 +13,14 @@ async function makeGet({campaignID, pathSuffix, id, entityType, noCache = false}
 
     let requestPath = `https://kanka.io/api/v1/campaigns/${campaignID ? campaignID : ''}`;
 
-    if (pathSuffix && typeof pathSuffix !== 'string') throw new Error('Must provide path suffix');
+    if (pathSuffix) {
+        if (typeof pathSuffix !== 'string') throw new Error('Must provide path suffix');
+        requestPath = `${requestPath}/${pathSuffix}`;
+    }
 
-    requestPath = `${requestPath}/${pathSuffix ? pathSuffix : ''}`;
-
-    if (id) requestPath = `${requestPath}/${id}`
+    if (id) {
+        requestPath = `${requestPath}/${id}`;
+    }
 
     if (cache[requestPath] && useCache) {
         console.log(`Hit Cache for ${requestPath}`);
