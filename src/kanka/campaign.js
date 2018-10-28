@@ -10,7 +10,7 @@ const { Location } = require('./location');
 const { Organisation } = require('./organisation');
 const { Page } = require('./page');
 const { Quest } = require('./quest');
-const { Tag } = require('./tag');
+// const { Tag } = require('./tag');
 const { User } = require('./user');
 
 class Campaign{
