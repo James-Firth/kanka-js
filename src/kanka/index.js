@@ -2,6 +2,7 @@ const api = require('./api');
 const campaign = require('./campaign');
 
 
+const { Entity, setImageBasePath } = require('./entity');
 const { Calendar } = require('./calendar');
 const { Character } = require('./character');
 const { DiceRoll } = require('./dice_roll');
@@ -12,9 +13,24 @@ const { Location } = require('./location');
 const { Organisation } = require('./organisation');
 const { Page } = require('./page');
 const { Quest } = require('./quest');
+const { Tag } = require('./tag');
 const { User } = require('./user');
 
+function setDomains({ topLevelDomain = 'kanka.io',
+    imageBasePath = 'https://kanka-user-assets.s3.eu-central-1.amazonaws.com/'}){
+    api.setDomain(topLevelDomain);
+    campaign.setImageBasePath(imageBasePath);
+    setImageBasePath(imageBasePath);
+}
+
+function useDevServer() {
+    setDomains({ topLevelDomain: 'dev.kanka.io', imageBasePath: 'https://dev.kanka.io/storage/'})
+}
+
+// TODO: FINISH EXPORTING API AND DEV/PROD MODE
 module.exports = {
+    setDomains,
+    useDevServer,
     setToken: api.setToken,
     listCampaigns: campaign.all,
     getCampaign: campaign.getCampaign,
@@ -31,6 +47,7 @@ module.exports = {
         Organisation,
         Page,
         Quest,
+        Tag,
         User
     }
 }

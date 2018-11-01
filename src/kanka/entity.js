@@ -113,6 +113,7 @@ class Entity extends EntityBase{
 }
 
 function setImageBasePath(newPath) {
+    // TODO: Add url validation
     IMAGE_BASE_PATH = newPath;
 }
 
