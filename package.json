@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/James-Firth/kankajs.git"
+    "url": "git+https://github.com/James-Firth/kanka-js.git"
   },
   "keywords": [
     "js",
@@ -18,9 +18,9 @@
   "author": "James Firth <hello@james-firth.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/James-Firth/kankajs/issues"
+    "url": "https://github.com/James-Firth/kanka-js/issues"
   },
-  "homepage": "https://github.com/James-Firth/kankajs#readme",
+  "homepage": "https://github.com/James-Firth/kanka-js#readme",
   "dependencies": {
     "node-fetch": "^2.2.0"
   }
