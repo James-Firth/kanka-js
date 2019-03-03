@@ -4,11 +4,11 @@ const { Page } = require('./page');
 let token = null || process.env.KANKA_TOKEN;
 let code = null || process.env.KANKA_CODE;
 let DEBUG = false || process.env.DEBUG;
-let BASE_URL = 'https://kanka.io/api/v1/campaigns';
+let BASE_URL = 'https://kanka.io/api/1.0/campaigns';
 
 function setDomain(newDomain) {
     // TODO: Add url validation
-    BASE_URL = `https://${newDomain}/api/v1/campaigns`;
+    BASE_URL = `https://${newDomain}/api/1.0/campaigns`;
 }
 
 function setToken(newToken) {
