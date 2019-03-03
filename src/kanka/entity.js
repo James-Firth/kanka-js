@@ -57,7 +57,9 @@ class Entity extends EntityBase{
         const entity = { created_by, id, entity_id, entry, is_private, section_id, name, type};
         this.campaignID = campaignID;
         if (image) {
-            this.image = `${IMAGE_BASE_PATH}${image}`
+            this.image = `${IMAGE_BASE_PATH}${image}`;
+        } else {
+            this.image = null;
         }
         Object.assign(this, entity);
     }

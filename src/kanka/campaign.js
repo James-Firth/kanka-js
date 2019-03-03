@@ -24,7 +24,11 @@ class Campaign{
 
         Object.assign(this, campaign);
 
-        this.image = `${IMAGE_BASE_PATH}${image}`
+        if (image) {
+            this.image = `${IMAGE_BASE_PATH}${image}`;
+        } else {
+            this.image = null;
+        }
     }
 
     get public() { return this.visibility === 'public' }
