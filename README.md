@@ -1,5 +1,7 @@
 # Kanka JS
 
+:warning: I haven't had a chance to work with this for a long time now and there have been _many_ changes. Considering using this as inspiration for your own library instead of using it directly!
+
 A wrapper for the Kanka API written in javascript. 
 
 
